@@ -1,0 +1,7 @@
+{
+  "name": "myRes",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
