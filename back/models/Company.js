@@ -16,7 +16,13 @@ const companySchema = new Schema({
         type : Schema.Types.ObjectId,
         ref : 'Categories_Company',
         required : true
+    },
+    currency : {
+        type : String,
+        required : true
+
     }
+
    
 });
 

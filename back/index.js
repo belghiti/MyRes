@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const session = require('express-session');
 const server = require("http").createServer(app)
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -35,6 +36,9 @@ app.use(cors({credentials: true, origin: ['http://localhost:8100','http://localh
 app.use(express.json());
 app.use(bodyParser.json());
 app.use('/uploads',express.static('uploads'))
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true, cookie: {
+    secure: false,
+  }}));
 // Route Middleware
 
 app.use('/api/user',authUser);

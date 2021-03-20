@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { isPropertySignature } from 'typescript';
 function BarChart(props : any) {
     let [order_day, setorder_day] = useState([]);
+    let [order_month, setorder_month] = useState([]);
     console.log(props.user._id)
     
      useEffect(()=>{
@@ -19,10 +20,22 @@ function BarChart(props : any) {
               .catch((error) => console.log(error.resp));
               
           };
+
+          const getOrderMonth =  () => {
+            
+            axios
+            .get(`http://localhost:3001/api/order/monthly-stats/${props.user._id}`)
+            
+            .then(res => {setorder_month(res.data);})
+            .catch((error) => console.log(error.resp));
+            
+        };
           getOrderDay();
+          getOrderMonth();
          
     },[])
     console.log(order_day)
+    console.log(order_month)
     /*order_day.map(element  => {
        element
         
@@ -76,7 +89,7 @@ function BarChart(props : any) {
                 "#6970d5" ,
                 "#1fc397",
                 "#6970d7a" ,
-                "#ff8366"
+                "#bf8366"
               ],
         }
     

@@ -65,13 +65,7 @@ class AddNewUserComponent extends React.Component<ProductComponentProps, Product
             axios.put(`http://localhost:3001/api/user/edit_worker/${data.data._id}`,{
                     user_id : this.props.user._id
                 })
-           /* .then(res=>
-                {console.log(res)
-                axios.put(`http://localhost:3001/api/user/edit_worker/${data.data._id}`,{
-                    user_id : res.data._id
-                })
-            */
-            
+          
             this.setState({
                 role_id : "6033c08635b02121a04465ec",
                 name: "",

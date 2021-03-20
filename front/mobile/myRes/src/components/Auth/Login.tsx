@@ -12,29 +12,24 @@ import {
   IonButton,
 } from '@ionic/react';
 
+import { IonApp, IonPage, IonRouterOutlet } from '@ionic/react';
+import User from '../Register/User'
+import { IonReactRouter } from '@ionic/react-router';
+import { Redirect, Route, Link, BrowserRouter } from 'react-router-dom';
 const axios = require('axios');
 
 
-const emailRegex = RegExp(
-  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-);
+const validEmailRegex = 
+  RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
-const formValid = ({ formErrors  , ...rest } : any)  => {
-  let valid = true;
-
-  // validate form errors being empty
-  Object.values(formErrors).forEach((val :any) => {
-    val.length > 0 && (valid = false);
-  });
-
-  // validate the form was filled out
-  Object.values(rest).forEach(val => {
-    val === null && (valid = false);
-  });
-
-  return valid;
-};
-
+  const validateForm = (errors : any) => {
+    let valid = true;
+    Object.values(errors).forEach(
+      // if we have an error string set valid to false
+      (val : any) => val.length > 0 && (valid = false)
+    );
+    return valid;
+  }
 class Login extends React.Component<{userLogin:any},{email : string,password: string,formErrors:any}>{
 
   constructor (props:any) {
@@ -58,11 +53,11 @@ handleChange = (ev:any) =>{
 
   });
   const { name, value } = ev.target;
-  let formErrors = { ...this.state.formErrors };
+  let formErrors = this.state.formErrors;
   switch (name) {
     
     case "email":
-      formErrors.email = emailRegex.test(value)
+      formErrors.email = validEmailRegex.test(value)
         ? ""
         : "invalid email address";
       break;
@@ -73,14 +68,16 @@ handleChange = (ev:any) =>{
     default:
       break;
   }
+  this.setState({formErrors, [name]: value} as any, ()=> {
+    console.log(formErrors)
+})
 }
 
 handleSubmit = (ev:any) => {
       ev.preventDefault();
 
     console.log(this.state) 
-
-
+    if(validateForm(this.state.formErrors)) {
       axios.post('http://localhost:3001/api/user/login', {email : this.state.email,password : this.state.password})
       .then( (response:any) => {
         
@@ -94,13 +91,18 @@ handleSubmit = (ev:any) => {
         console.log(error);
     
       });
+    }else{
+      alert('email ou mot de passe invalid')
+    }
+
+     
   
 }
 
 render() {
-  
+  const {formErrors} = this.state;
   return (
-    <form className="ion-padding" onSubmit={this.handleSubmit}>
+    <form className="ion-padding "  onSubmit={this.handleSubmit}>
         <IonItem>
           <IonLabel position="floating">Email</IonLabel>
           <IonInput 
@@ -109,21 +111,35 @@ render() {
               onIonChange={(e:any)=>this.handleChange(e)}
              
               />
-              {this.state.formErrors.email.length > 0 && (
-                <span className="errorMessage">{this.state.formErrors.email}</span>
-              )}
+              
         </IonItem>
+     
+        {formErrors.email.length > 0 && (
+
+            <span className=" text-danger h5 ">
+                  {this.state.formErrors.email}
+                </span>
+
+                
+              )}
+       
+        
         <IonItem>
           <IonLabel position="floating">Mot de pass</IonLabel>
           <IonInput name="password" type="password" value={this.state.password} onIonChange={(e:any)=>this.handleChange(e)}/>
         </IonItem>
+        {formErrors.password.length > 0 && 
+  <span className='text-danger h5 '>{formErrors.password}</span>}
         <IonItem lines="none">
           <IonLabel>Remember me</IonLabel>
           <IonCheckbox defaultChecked={true} slot="start" />
         </IonItem>
         <IonButton className="ion-margin-top" type="submit" expand="block">
-          Login
+          Connecte
         </IonButton>
+     
+        
+    
     </form>
   );
 }

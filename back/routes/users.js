@@ -4,6 +4,7 @@ const app = express()
 const User = require('../models/User');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs');
+const session = require('express-session');
 const { registerValidation, loginValidation} = require('../validation');
 //Registre
 

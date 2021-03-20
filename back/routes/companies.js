@@ -13,6 +13,7 @@ router.post('/add',async (req,res) => {
         name_company : req.body.name_company,
         id_User : req.body.id_User, 
         category_company : req.body.category_company,
+        currency : req.body.currency
      });
      try {
          const savecompany = await company.save();

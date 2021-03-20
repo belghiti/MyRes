@@ -2,6 +2,16 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+const validEmailRegex = 
+  RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+  const validateForm = (errors ) => {
+    let valid = true;
+    Object.values(errors).forEach(
+      // if we have an error string set valid to false
+      (val ) => val.length > 0 && (valid = false)
+    );
+    return valid;
+  }
 class Login extends Component {
     constructor(props){
         super(props)
@@ -11,7 +21,11 @@ class Login extends Component {
         this.state={
             email:"",
             password:"",
-            errorMessage : ''
+            formErrors: {
+        
+              email: "",
+              password: ""
+            }
            
           };
        
@@ -22,14 +36,32 @@ class Login extends Component {
          [ev.target.name]: ev.target.value
       
         });
+        const { name, value } = ev.target;
+      let formErrors = this.state.formErrors;
+      switch (name) {
+    
+    case "email":
+      formErrors.email = validEmailRegex.test(value)
+        ? ""
+        : "invalid email address";
+      break;
+    case "password":
+      formErrors.password =
+        value.length < 6 ? "minimum 6 characaters required" : "";
+      break;
+    default:
+      break;
+  }
+  this.setState({formErrors, [name]: value} , ()=> {
+    console.log(formErrors)
+})
     }
 
     handleSubmit = (ev) => {
         ev.preventDefault();
       
       console.log(this.state) 
-      
-    
+      if(validateForm(this.state.formErrors)) {
         axios.post('http://localhost:3001/api/user/login', {email : this.state.email,password : this.state.password})
         .then( (response) => {
           
@@ -41,10 +73,13 @@ class Login extends Component {
         })
         .catch( (error) => {
           console.log(error);
-        this.setState({
-           errorMessage : "Email ou mot de passe incorrect"
-         })
+        
         });
+      } else {
+        alert('email ou mot de passe invalid')
+      }
+    
+        
         
       }
     render() {
@@ -64,7 +99,12 @@ class Login extends Component {
                                     aria-describedby="emailHelp" 
                                     onChange={this.handleChange}
                                 />
-                                <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                               
+                                {this.state.formErrors.email.length > 0 && (
+                                  <span className=" text-danger h5 ">
+                                      {this.state.formErrors.email}
+                                  </span>
+                                )}
                             </div>
                             <div className="mb-3">
                                 <label for="exampleInputPassword1" className="form-label">Password</label>
@@ -76,6 +116,8 @@ class Login extends Component {
                                     id="exampleInputPassword1" 
                                     onChange={this.handleChange}
                                 />
+                                {this.state.formErrors.password.length > 0 && 
+                                  <span className='text-danger h5 '>{this.state.formErrors.password}</span>}
                             </div>
                            
                             <button type="submit" className="btn btn-primary">Submit</button>

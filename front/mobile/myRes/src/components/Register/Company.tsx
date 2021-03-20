@@ -17,7 +17,7 @@ import {
  // withIonLifeCycle 
 } from '@ionic/react';
 
-class Company extends React.Component<{user : any,id:any},{selectOptions:any,catCompany : any,name:any,category_company_id : any,id_User:any}>  {
+class Company extends React.Component<{user : any,id:any},{selectOptions:any,currency:any,catCompany : any,name:any,category_company_id : any,id_User:any}>  {
     constructor (props:any) {
         super(props)
         this.state = {
@@ -25,7 +25,8 @@ class Company extends React.Component<{user : any,id:any},{selectOptions:any,cat
           id_User : '',
           catCompany : [],
           name:'',
-          category_company_id : ""
+          category_company_id : "",
+          currency:''
           
         }
 

@@ -3,14 +3,16 @@ import Page from './pages/Page';
 import Home from './pages/Home'
 import Product from './pages/Product'
 import Order from './pages/Order'
+import Register from './components/Register/User'
 import Login from './components/Auth/Login'
 import User from './pages/User';
 import Company from './components/Register/Company'
 import React,{ useState } from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane, IonFooter } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route,Link, BrowserRouter as Router,Switch  } from 'react-router-dom';
 import { connect } from 'react-redux';
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -83,10 +85,23 @@ class App extends React.Component<{user : any,token: string,companies: string}> 
             <Company id = {userID}/>
           </div>
         ) */: (
-          <div>
-            <Login />
-          </div>
           
+          <div className='row'>
+      
+             <Router>
+            
+                
+              <Switch>
+                
+                <Route path="/register"  component={Register} />
+                <Route path="/login"  component={Login} />
+                <Redirect from="/" to="/login" exact />
+              </Switch>
+              <Link to="/register">Register </Link>
+              
+             </Router>
+             
+          </div>
         )
         }
       </IonReactRouter>

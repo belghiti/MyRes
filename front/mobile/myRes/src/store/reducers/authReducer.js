@@ -8,9 +8,7 @@ const authReducer = (state = initState, action) => {
        
         case 'LOGIN_USER':
                 
-            //state.token = action.token
-            //state.user = action.user
-            //console.log(state)
+     
             return {
                 ...state,
                 token: action.token,
