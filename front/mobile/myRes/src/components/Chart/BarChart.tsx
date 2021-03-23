@@ -4,6 +4,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { isPropertySignature } from 'typescript';
+
 function BarChart(props : any) {
     let [order_day, setorder_day] = useState([]);
     let [order_month, setorder_month] = useState([]);
@@ -54,28 +55,19 @@ function BarChart(props : any) {
     const total = (order_day !== undefined || order_day !== []) 
                   ? order_day.reduce((sum,total : any)=>sum = sum + total.total,0)
                   : 0
+                  
     console.log(arrOrd.reverse())
-    const d = new Date()
-    const dt = d.getDay()
-    console.log(dt)
-    const days = ['Dimench','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samdi']
+
+    const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi']
+
     let days2 = []
    
-        for(let i = dt; i<days.length;i++) {
-            days2.push(days[i]) 
-        }
-        if(dt !== 0) {
-            for(let i = 0; i<dt;i++) {
-              days2.push(days[i]) 
-             }
-        }
-        
+    for(let i = 0; i<7; i++) {
+        days2.push(days[parseInt(moment().subtract(i, 'days').format('d'))])
+    }
     
-    
+    console.log(days2.reverse())
 
-    
-
-   console.log(days2.reverse())
     const data = {
         labels : days2,// date.now
         datasets : [

@@ -30,14 +30,20 @@ class OrderComponent extends React.Component<OrderComponentProps, OrderComponent
         console.log(this.props.user.users[0].id)
         
     }
-    allOrder = () => {
-        return axios.get(`http://localhost:3001/api/order/${this.props.user.users[0].id}`).then( data => {
-  
-            this.setState({
-                Order : data.data
+    
+    allOrder = async () => {
+        let orders:any = []
+
+        for (let i =0; i<this.props.user.users.length;i++){
+            await axios.get(`http://localhost:3001/api/order/${this.props.user.users[i].id}`).then( data => {
+                orders.push(...data.data)            
             })
-           // console.log(this.state.Order)
+        }
+
+        this.setState({
+            Order : orders
         })
+       
      }
 
    
@@ -64,7 +70,7 @@ class OrderComponent extends React.Component<OrderComponentProps, OrderComponent
     
     render() { 
        
-        const listOrder = (this.state.Order !== undefined) ? this.state.Order.map((item : any,index: any)=>{
+        const listOrder = (this.state.Order.length !== 0) ? this.state.Order.map((item : any,index: any)=>{
          return   <IonItemGroup key={index}>
                     <IonItemDivider>
                     <IonLabel>Nom de travailleur : <strong>{item.user_id.name}</strong> - {item.date}</IonLabel>
