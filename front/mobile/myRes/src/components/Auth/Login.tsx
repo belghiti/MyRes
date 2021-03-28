@@ -30,7 +30,7 @@ const validEmailRegex =
     );
     return valid;
   }
-class Login extends React.Component<{userLogin:any},{email : string,password: string,formErrors:any}>{
+class Login extends React.Component<{userLogin:any,match:any},{email : string,password: string,formErrors:any}>{
 
   constructor (props:any) {
     super(props)
@@ -44,6 +44,8 @@ class Login extends React.Component<{userLogin:any},{email : string,password: st
         }
     }
 }
+
+
 
 handleChange = (ev:any) =>{
   
@@ -103,6 +105,7 @@ handleSubmit = (ev:any) => {
 }
 
 render() {
+  (this.props.match.params.logout == 2 ) && localStorage.clear()
   const {formErrors} = this.state;
   return (
     <form className="ion-padding "  onSubmit={this.handleSubmit}>

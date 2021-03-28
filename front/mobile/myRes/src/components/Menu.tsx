@@ -18,6 +18,7 @@ import { archiveOutline, archiveSharp,
 
 import './Menu.css';
 import { useHistory } from "react-router-dom";
+import Login from './Auth/Login';
 interface AppPage {
   url: string;
   iosIcon: string;
@@ -56,17 +57,30 @@ const appPages: AppPage[] = [
     mdIcon: mailSharp,
   //  component:<LineChart />
   },
+  {
+    title: 'Ajouter un travailleur',
+    url: '/logout',
+    iosIcon: mailOutline,
+    mdIcon: mailSharp,
+  //  component:<LineChart />
+  }
+
 ];
 
-const Logout = () => {
-  let history = useHistory();
-  localStorage.removeItem('user');
-  console.log('logout')
-  history.push("/login");
-  
-}
+
 
 const Menu: React.FC = () => {
+  const history = useHistory();
+  const Logout = () => {
+    
+    localStorage.clear();
+    console.log('logout')
+    history.push("/");
+    //return <Redirect from="/" to="/login" exact />
+     
+  
+    
+  }
   const location = useLocation();
 
   return (
@@ -88,7 +102,11 @@ const Menu: React.FC = () => {
               </IonMenuToggle>
             );
           })}
-        <IonLabel onClick={()=>Logout()}>déconnecter</IonLabel>
+          
+         
+                 
+                  <IonLabel >Déconnecté</IonLabel>
+             
         </IonList>
 
         

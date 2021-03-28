@@ -12,6 +12,12 @@ const authReducer = (state = initState, action) => {
                 token: action.token,
                 user: action.user
             }
+        case 'LOGOUT' : 
+            return {
+                ...state,
+                token: null,
+                user: null
+            }
         default:
             return state
     }

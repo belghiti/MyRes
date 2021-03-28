@@ -5,6 +5,7 @@ import Product from './pages/Product'
 import Order from './pages/Order'
 import Register from './components/Register/User'
 import Login from './components/Auth/Login'
+import Logout from './components/Auth/Logout'
 import User from './pages/User';
 import Company from './components/Register/Company'
 import React,{ useState } from 'react';
@@ -43,7 +44,7 @@ class App extends React.Component<{user : any,token: string,companies: string}> 
   
   render(){
     const {user,token,companies} = this.props
-    console.log("User : ",user)
+    console.log("token : ",token)
     // console.log("Token : ",token)
     // console.log("Companies : ",companies)
 
@@ -66,7 +67,7 @@ class App extends React.Component<{user : any,token: string,companies: string}> 
   
       <IonApp>
         <IonReactRouter>
-          {localStorage.getItem('token') !== null && localStorage.getItem('user') !== null /*&& companies !==null */? (
+          {localStorage.getItem('token') !== null /*&& companies !==null */? (
           <IonSplitPane contentId="main">
             <Menu />
             <IonRouterOutlet id="main">
@@ -74,7 +75,7 @@ class App extends React.Component<{user : any,token: string,companies: string}> 
               <Route path="/poducts" component={Product}  />
               <Route path="/orders" component={Order}  />
               <Route path="/addNewUser" component={User}  />
-              
+              <Route path="/logout" component={Logout}  />
               <Redirect from="/" to="/home" exact />
             
           
