@@ -13,7 +13,9 @@ import {
   IonInput,
   IonCheckbox,
   IonButton,
+  IonBackButton, IonHeader, IonToolbar, IonButtons, IonTitle
 } from '@ionic/react';
+import Login from '../Auth/Login'
 import { NavLink } from 'react-router-dom';
 
 export interface ProductComponentProps {
@@ -94,7 +96,7 @@ class Register extends React.Component<ProductComponentProps, ProductComponentSt
 
   }
   next_page = () => {
-    <Router>
+   /* <Router>
             
                 
               <Switch>
@@ -104,15 +106,32 @@ class Register extends React.Component<ProductComponentProps, ProductComponentSt
                 <Redirect from="/" to="/login" exact />
               </Switch>
               <Link to="/register">Register </Link>
-              </Router>
+              </Router>*/
   }
     
 render() {
 
     
   return (
-    
-   //onSubmit={this.register_user}
+    <div>
+    <IonHeader>
+        <IonToolbar>
+      <IonButtons slot="start">
+      <Router>
+      <Switch>
+<Route path="/login"  component={Login} />
+        </Switch>
+      
+      </Router>
+        <IonBackButton defaultHref='/login' />
+      </IonButtons>
+      <IonTitle>Créer votre compte</IonTitle>
+    </IonToolbar>
+    </IonHeader>
+  
+  
+  { /*onSubmit={this.register_user}*/}
+  
 <form className="ion-padding" >
 <IonItem>
   <IonLabel position="floating">Votre nom et prenom </IonLabel>
@@ -140,9 +159,10 @@ render() {
 }}>
   Suivant
 </IonButton>
+
 </form>
 
-
+</div>
   
   );
 }

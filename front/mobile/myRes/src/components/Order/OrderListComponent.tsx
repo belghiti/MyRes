@@ -14,7 +14,8 @@ import Moment from 'moment';
 
 
 export interface OrderComponentProps {
-  user : any
+  user : any,
+  //allOrders : any
 }
  
 export interface OrderComponentState {
@@ -27,15 +28,22 @@ class OrderComponent extends React.Component<OrderComponentProps, OrderComponent
         this.state = {
             Order : []
         }
-        console.log(this.props.user.users[0].id)
+
         
     }
-    
+
+   
+     
+     
     allOrder = async () => {
         let orders:any = []
-
-        for (let i =0; i<this.props.user.users.length;i++){
-            await axios.get(`http://localhost:3001/api/order/${this.props.user.users[i].id}`).then( data => {
+        const userId = this.props.user === null ? JSON.parse(localStorage.getItem('user')+'') : this.props.user
+       console.log(userId)
+ 
+        for (let i =0; i<userId.users.length;i++){
+            console.log(i)
+            
+            await axios.get(`http://localhost:3001/api/order/${userId.users[i].id}`).then( data => {
                 orders.push(...data.data)            
             })
         }
@@ -43,7 +51,8 @@ class OrderComponent extends React.Component<OrderComponentProps, OrderComponent
         this.setState({
             Order : orders
         })
-       
+       // this.props.allOrders(orders)
+       console.log(this.props)
      }
 
    
@@ -69,7 +78,7 @@ class OrderComponent extends React.Component<OrderComponentProps, OrderComponent
 
     
     render() { 
-       
+      
         const listOrder = (this.state.Order.length !== 0) ? this.state.Order.map((item : any,index: any)=>{
          return   <IonItemGroup key={index}>
                     <IonItemDivider>
@@ -108,4 +117,16 @@ const mapStateToProps = (state:any) => {
     }
   }
 
+  /*const mapDispatchToProps = (dispatch:any) => {
+    return {
+      allOrders : (order:any) => {
+        dispatch({
+          type : 'Get_Order',
+          order : order
+         
+          
+        })
+      }
+    }
+  }*/
 export default  connect(mapStateToProps)(OrderComponent);

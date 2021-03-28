@@ -3,11 +3,14 @@ import authReducer from "./authReducer";
 import  {combineReducers} from 'redux'
 import companyReducer from "./companyReducer";
 import categoryCompanyReducer from "./categoryCompany";
+//import companyReducer from "./companyReducer";
+import orderReducer from "./orderReducer";
 
 const appReducer = combineReducers({
     auth : authReducer,
     companies : companyReducer,
-    catCompany : categoryCompanyReducer
+    catCompany : categoryCompanyReducer,
+    order : orderReducer
     
 })
 

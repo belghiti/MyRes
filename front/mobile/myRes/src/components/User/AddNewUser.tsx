@@ -34,7 +34,7 @@ class AddNewUserComponent extends React.Component<ProductComponentProps, Product
            password:"",
            users : []
         }
-        console.log(this.props.user._id)
+        //console.log(this.props.user._id)
     }
 
     handleChange  = (event: any)   => {
@@ -48,6 +48,8 @@ class AddNewUserComponent extends React.Component<ProductComponentProps, Product
 
     addNewWorker = (ev : any)=> {
         ev.preventDefault();
+        const userId = this.props.user === null ? JSON.parse(localStorage.getItem('user')+'')._id : this.props.user
+        
         axios.post('http://localhost:3001/api/user/register',{
             role_id : this.state.role_id,
             name : this.state.name,
@@ -57,13 +59,13 @@ class AddNewUserComponent extends React.Component<ProductComponentProps, Product
 
         }).then(data=>
             {console.log("Le travailleur ete enregistrer avec succes : ",data.data)
-            axios.put(`http://localhost:3001/api/user/edit_admin/${this.props.user._id}`,{
+            axios.put(`http://localhost:3001/api/user/edit_admin/${userId}`,{
                 user_id : data.data._id
                
             })
 
             axios.put(`http://localhost:3001/api/user/edit_worker/${data.data._id}`,{
-                    user_id : this.props.user._id
+                    user_id : userId
                 })
           
             this.setState({

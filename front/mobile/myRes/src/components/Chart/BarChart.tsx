@@ -1,51 +1,41 @@
 import React,{ useState,useEffect } from 'react'
 import {Bar} from 'react-chartjs-2'
+import {Line} from 'react-chartjs-2';
 import moment from 'moment';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { isPropertySignature } from 'typescript';
 
 function BarChart(props : any) {
     let [order_day, setorder_day] = useState([]);
-    let [order_month, setorder_month] = useState([]);
-    console.log(props.user._id)
+    //let user: any = JSON.parse(localStorage.getItem('user')+'')
+    
     
      useEffect(()=>{
-        
+        const userId = props.user === null ? JSON.parse(localStorage.getItem('user')+'')._id : props.user._id
+        console.log(userId)
         const getOrderDay =  () => {
             
               axios
-              .get(`http://localhost:3001/api/order/daily-stats/${props.user._id}`)
+              .get(`http://localhost:3001/api/order/daily-stats/${userId}`)
               
               .then(res => {setorder_day(res.data);})
               .catch((error) => console.log(error.resp));
               
           };
 
-          const getOrderMonth =  () => {
-            
-            axios
-            .get(`http://localhost:3001/api/order/monthly-stats/${props.user._id}`)
-            
-            .then(res => {setorder_month(res.data);})
-            .catch((error) => console.log(error.resp));
-            
-        };
           getOrderDay();
-          getOrderMonth();
          
     },[])
-    console.log(order_day)
-    console.log(order_month)
-    /*order_day.map(element  => {
-       element
-        
-    });*/
+  
+    
+    //console.log(props.user._id)
+   
+
     const arrOrd= order_day.map((item: any,key : any)=> {
                     let ttl = 0
-                     console.log(item)
+                  
                        item.map((itm : any,ky : any)=>{
-                          console.log(itm)
+                      
                           ttl = ttl + itm.total
                           return itm
                      })
@@ -72,7 +62,7 @@ function BarChart(props : any) {
         labels : days2,// date.now
         datasets : [
             {
-            label : 'Sales for 2020',
+            label : 'Sales for last week',
             data: arrOrd ,// total du jour
             backgroundColor: [
                 "#f38b4a",
@@ -95,7 +85,10 @@ function BarChart(props : any) {
      
     //const data = <Bar data={data} />
 
-    return <Bar data={data} />
+    return <div>
+                <Bar data={data} />  
+                <Line data = {data} />
+        </div>
        
 }
 

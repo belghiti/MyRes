@@ -9,7 +9,7 @@ import {
   IonMenuToggle,
   IonNote,
 } from '@ionic/react';
-
+import { Redirect, Route,Link, BrowserRouter as Router,Switch  } from 'react-router-dom';
 import React,{Component} from 'react';
 import { useLocation } from 'react-router-dom';
 import { archiveOutline, archiveSharp, 
@@ -17,9 +17,7 @@ import { archiveOutline, archiveSharp,
    mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
 
 import './Menu.css';
-import Home from '../pages/Home'
-import LineChart from './Chart/LineChart';
-
+import { useHistory } from "react-router-dom";
 interface AppPage {
   url: string;
   iosIcon: string;
@@ -60,6 +58,13 @@ const appPages: AppPage[] = [
   },
 ];
 
+const Logout = () => {
+  let history = useHistory();
+  localStorage.removeItem('user');
+  console.log('logout')
+  history.push("/login");
+  
+}
 
 const Menu: React.FC = () => {
   const location = useLocation();
@@ -78,10 +83,12 @@ const Menu: React.FC = () => {
                 routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
                   <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
                   <IonLabel>{appPage.title}</IonLabel>
+                  
                 </IonItem>
               </IonMenuToggle>
             );
           })}
+        <IonLabel onClick={()=>Logout()}>déconnecter</IonLabel>
         </IonList>
 
         

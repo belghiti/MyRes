@@ -7,12 +7,9 @@ import { pin, wifi, wine, warning, walk } from 'ionicons/icons';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import { isPlatform } from '@ionic/react';
-import { CameraResultType, CameraSource, CameraPhoto, Capacitor, FilesystemDirectory,Plugins } from "@capacitor/core";
-import UpdateProduct from './UpdateProduct'
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 
 
-const { Camera } = Plugins;
 export interface ProductComponentProps {
    // push : any
    user : any,
@@ -60,29 +57,13 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
     }
     
   
- /*takePicture = async () => {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: true,
-      resultType: CameraResultType.Uri
-    });
-    // image.webPath will contain a path that can be set as an image src.
-    // You can access the original file using image.path, which can be
-    // passed to the Filesystem API to read the raw data of the image,
-    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-    var imageUrl = image.webPath;
-    console.log(imageUrl)
-    // Can be set to the src of an image now
-    //imageElement.src = imageUrl;
-  }*/
-   //values = this.state.image
+
    onFileChange = (fileChangeEvent: any) => {
        const img = fileChangeEvent.target.files[0]
        this.setState({ 
-        //...this.state,
+
         image: img
     });
-    //this.values.current.file = fileChangeEvent.target.files[0];
     console.log(this.state.image, 'the state ..... ')
   };
 
@@ -93,13 +74,27 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
    
     
     allProduct = () => {
-        return axios.get(`http://localhost:3001/api/product/${this.props.user._id}`).then( data => {
+        const userId = this.props.user === null ? JSON.parse(localStorage.getItem('user')+'')._id : this.props.user
+        axios.get(`http://localhost:3001/api/product/${userId}`).then( data => {
             console.log(data)
             this.setState({
                 product : data.data
             })
         })
-     }
+
+      /*  const { isLoading, error , data } = useQuery('repoData', () =>
+        axios.get(`http://localhost:3001/api/product/${this.props.user._id}`).then(data =>
+        {
+            console.log(data)
+            this.setState({
+                product : data.data
+            })
+        } )
+      
+   )
+   if (isLoading) return 'Loading...'
+   if (error) return 'An error has occurred: ' + error*/
+    }
 
      get_All_Categories_Product = () => {
         return axios.get('http://localhost:3001/api/productCategory').then( data => {
@@ -128,9 +123,10 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
         ev.preventDefault();
  
         let formData = new FormData();
-
+        const userId = this.props.user === null ? JSON.parse(localStorage.getItem('user')+'')._id : this.props.user
+        
         formData.append("name", this.state.name);
-        formData.append("id_User", this.props.user._id);
+        formData.append("id_User", userId);
         formData.append("status", this.state.status);
         formData.append("category_Product_id", this.state.cat_pro_id);
         formData.append("price", this.state.price);
@@ -167,12 +163,35 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
          
      }
 
-     updateProduct = (ev:any,id:any) => {
+     updateProduct = async (ev:any,id:any) => {
          ev.preventDefault();
-        return axios.put(`http://localhost:3001/api/product/update/${id}`,
-        {name:this.state.name,status:this.state.status,category_Product_id:this.state.cat_pro_id,price:this.state.price})
-        .then(res => {console.log("la modification effectué avec succes : ",res)})
-    }
+         let formData = new FormData();
+         const userId = this.props.user === null ? JSON.parse(localStorage.getItem('user')+'')._id : this.props.user
+        
+        formData.append("name", this.state.name);
+        formData.append("id_User", userId);
+        formData.append("status", this.state.status);
+        formData.append("category_Product_id", this.state.cat_pro_id);
+        formData.append("price", this.state.price);
+        formData.append("productImage", this.state.image, this.state.image.name);
+        console.log(formData)
+         axios.put(`http://localhost:3001/api/product/update/${id}`,formData,
+         {  
+        
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(res => {
+            console.log("la modification effectué avec succes : ",res)
+            this.setState({
+            
+                showPopover2 : false
+             })
+          
+                 
+        })
+        }
     deleteProduct = (id:any) => {
         return axios.delete(`http://localhost:3001/api/product/delete/${id}`).then(res=>{console.log('Delete : ',res)})
     }
@@ -243,8 +262,7 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
                             </IonSelect>
                         </IonItem>
                         <IonItem>
-                            <IonLabel position="floating">Image</IonLabel>
-                            <IonInput />
+                        <input type="file" onChange={(ev)=>this.onFileChange(ev)} name='file' />
                         
                             
                         </IonItem>
@@ -260,7 +278,9 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
                     isOpen={this.state.showPopover}
                     onDidDismiss={() => this.setState ({ showPopover: false, event: undefined })}
                 >
-                    <IonLabel position="floating">Ajouter un nouveau produit</IonLabel>
+                    <div className="mx-3 text-center">
+                      <h3><strong>Ajouter un nouveau produit</strong></h3>
+                    </div>
                     <form className="ion-padding" onSubmit={(e)=>this.addNewProduct(e)}>
                         <IonItem>
                             <IonLabel position="floating">Nom de produit</IonLabel>
@@ -281,9 +301,7 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
                         <input type="file" onChange={(ev)=>this.onFileChange(ev)} name='file' />
                        
                         </IonItem>
-                        <IonButton onClick={(ev)=>this.handlupload(ev)} className="ion-margin-top" type="submit" expand="block">
-                            Image
-                        </IonButton>
+                      
                         <IonButton className="ion-margin-top" type="submit" expand="block">
                             Ajouter
                         </IonButton>

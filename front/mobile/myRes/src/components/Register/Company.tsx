@@ -13,7 +13,8 @@ import {
   IonCheckbox,
   IonButton,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  IonBackButton, IonHeader, IonToolbar, IonButtons, IonMenuButton
  // withIonLifeCycle 
 } from '@ionic/react';
 
@@ -103,6 +104,17 @@ const lisCatCompany = this.state.catCompany
   }) : <div></div>
 
   return (
+    <div>
+    <IonContent>
+    {/*-- Default back button --*/}
+    <IonHeader>
+      <IonToolbar>
+        <IonButtons slot="start">
+          <IonBackButton />
+        </IonButtons>
+      </IonToolbar>
+    </IonHeader>
+    </IonContent>
     <form className="ion-padding" onSubmit={this.handleSubmit}>
     <IonItem>
       <IonLabel position="floating">Nom socieété</IonLabel>
@@ -124,6 +136,7 @@ const lisCatCompany = this.state.catCompany
       Suivant
     </IonButton>
     </form>
+    </div>
   );
 }
 };

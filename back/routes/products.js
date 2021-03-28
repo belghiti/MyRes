@@ -72,13 +72,15 @@ router.get('/',async (req,res) => {
     res.send(allPoduct)
  })
 
- router.put('/update/:id',async (req,res) => {
+ router.put('/update/:id',upload.single('productImage') ,async (req,res) => {
 
     return Product.findById(req.params.id, function (err, product) {
         product.name = req.body.name;
+        product.id_User = req.body.id_User,
         product.price = req.body.price;
         product.status = req.body.status;
         product.category_Product_id = req.body.category_Product_id;
+        product.productImage = req.file.path
         return product.save(function (err) {
           if (!err) {
             console.log("updated");

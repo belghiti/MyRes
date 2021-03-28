@@ -66,24 +66,10 @@ router.get('/monthly-stats/:id',async (req,res) => {
  //const week = moment().subtract(7, 'days').format('DD-MM-YYYY')
  const ordr = await Order.find({user_id: req.params.id}) 
  if(ordr) {
-   const date_0 = moment().subtract(dt, 'months').format('DD-MM-YYYY')
- const date_1 = moment().subtract(dt+1, 'months').format('DD-MM-YYYY')
- const date_2 = moment().subtract(dt+2, 'months').format('DD-MM-YYYY')
- const date_3 = moment().subtract(dt+3, 'months').format('DD-MM-YYYY')
- const date_4 = moment().subtract(dt+4, 'months').format('DD-MM-YYYY')
- const date_5 = moment().subtract(dt+5, 'months').format('DD-MM-YYYY')
- const date_6 = moment().subtract(dt+6, 'months').format('DD-MM-YYYY')
  
-   const order_month0 = await Order.find({date:date_0})
-   const order_month1 = await Order.find({date:date_1})
-   const order_month2 = await Order.find({date:date_2})
-   const order_month3 = await Order.find({date:date_3})
-   const order_month4 = await Order.find({date:date_4})
-   const order_month5 = await Order.find({date:date_5})
-   const order_month6 = await Order.find({date:date_6})
    
-   console.log(order_month0)
-   res.send([order_month0,order_month1,order_month2,order_month3,order_month4,order_month5,order_month6])
+   //console.log(moment([2014, 0, 31]).diff(moment([2013, 9, 31]), 'days', true))
+   
  }
  
  })

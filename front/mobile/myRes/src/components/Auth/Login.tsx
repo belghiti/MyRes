@@ -86,6 +86,9 @@ handleSubmit = (ev:any) => {
               // Redirection
             // this.props.history.push('/')
             // if(re)
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+
       })
       .catch( (error:any) => {
         console.log(error);
