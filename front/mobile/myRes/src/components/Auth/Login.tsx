@@ -30,7 +30,7 @@ const validEmailRegex =
     );
     return valid;
   }
-class Login extends React.Component<{userLogin:any,match:any},{email : string,password: string,formErrors:any}>{
+class Login extends React.Component<{userLogin:any,match:any, history: any},{redirect: any, email : string,password: string,formErrors:any}>{
 
   constructor (props:any) {
     super(props)
@@ -38,10 +38,10 @@ class Login extends React.Component<{userLogin:any,match:any},{email : string,pa
         email:"abdelilahelkhdim@gmail.com",
         password:"123456789",
         formErrors: {
-        
           email: "",
           password: ""
-        }
+        },
+        redirect: false
     }
 }
 
@@ -90,7 +90,7 @@ handleSubmit = (ev:any) => {
             // if(re)
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
-
+            this.setState({...this.state, redirect: true})
       })
       .catch( (error:any) => {
         console.log(error);
@@ -104,51 +104,50 @@ handleSubmit = (ev:any) => {
   
 }
 
-render() {
-  (this.props.match.params.logout == 2 ) && localStorage.clear()
-  const {formErrors} = this.state;
-  return (
-    <form className="ion-padding "  onSubmit={this.handleSubmit}>
-        <IonItem>
-          <IonLabel position="floating">Email</IonLabel>
-          <IonInput 
-              name="email" 
-              value={this.state.email} 
-              onIonChange={(e:any)=>this.handleChange(e)}
-             
-              />
+  render() {
+    const {formErrors} = this.state;
+    return this.state.redirect ? <Redirect to="/home" /> : (
+      <form className="ion-padding "  onSubmit={this.handleSubmit}>
+          <IonItem>
+            <IonLabel position="floating">Email</IonLabel>
+            <IonInput 
+                name="email" 
+                value={this.state.email} 
+                onIonChange={(e:any)=>this.handleChange(e)}
               
-        </IonItem>
-     
-        {formErrors.email.length > 0 && (
-
-            <span className=" text-danger h5 ">
-                  {this.state.formErrors.email}
-                </span>
-
+                />
                 
-              )}
-       
+          </IonItem>
+      
+          {formErrors.email.length > 0 && (
+
+              <span className=" text-danger h5 ">
+                    {this.state.formErrors.email}
+                  </span>
+
+                  
+                )}
         
-        <IonItem>
-          <IonLabel position="floating">Mot de pass</IonLabel>
-          <IonInput name="password" type="password" value={this.state.password} onIonChange={(e:any)=>this.handleChange(e)}/>
-        </IonItem>
-        {formErrors.password.length > 0 && 
-  <span className='text-danger h5 '>{formErrors.password}</span>}
-        <IonItem lines="none">
-          <IonLabel>Remember me</IonLabel>
-          <IonCheckbox defaultChecked={true} slot="start" />
-        </IonItem>
-        <IonButton className="ion-margin-top" type="submit" expand="block">
-          Connecte
-        </IonButton>
-     
-        
-    
-    </form>
-  );
-}
+          
+          <IonItem>
+            <IonLabel position="floating">Mot de pass</IonLabel>
+            <IonInput name="password" type="password" value={this.state.password} onIonChange={(e:any)=>this.handleChange(e)}/>
+          </IonItem>
+          {formErrors.password.length > 0 && 
+    <span className='text-danger h5 '>{formErrors.password}</span>}
+          <IonItem lines="none">
+            <IonLabel>Remember me</IonLabel>
+            <IonCheckbox defaultChecked={true} slot="start" />
+          </IonItem>
+          <IonButton className="ion-margin-top" type="submit" expand="block">
+            Connecte
+          </IonButton>
+      
+          
+      
+      </form>
+    );
+  }
 };
 
 const mapDispatchToProps = (dispatch:any) => {

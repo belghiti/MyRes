@@ -35,84 +35,62 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { imageSharp } from 'ionicons/icons';
+import { stat } from 'fs';
 const queryClient = new QueryClient()
-class App extends React.Component<{user : any,token: string,companies: string}>   {
+
+class App extends React.Component<{user : any,token: string,companies: string},{isAuth:any}> {
   constructor(props:any){
     super(props);
-    
+    this.state = {
+      isAuth : false
+    }
   }
-  
-  render(){
+  componentDidMount() {
+      this.setState({
+        isAuth : localStorage.getItem('user') !== null && localStorage.getItem('token') !== null
+      })
+  }
+
+  componentDidUpdate(prevState:any,actState:any) {
+    console.log(prevState)
+    console.log(actState)
+  }
+
+  render() {
     const {user,token,companies} = this.props
-    console.log("token : ",token)
-    // console.log("Token : ",token)
-    // console.log("Companies : ",companies)
-
-    // var userID = ''
-    // if(user !== null){
-    //   userID = user._id
-    // }
-
-    /*const userID = (user !== null ) ? user.map((item:any,key:any) => {
-      
-      return item._id
-    }) : '0'*/
-  //   console.log(userID)
-  //   var isAuth = false
-  //  // var getCompanies = companies
-  //   if (user !== null) {
-  //     isAuth = true
-  //   }
-  return (
-  
-      <IonApp>
-        <IonReactRouter>
-          {localStorage.getItem('token') !== null /*&& companies !==null */? (
-          <IonSplitPane contentId="main">
-            <Menu />
-            <IonRouterOutlet id="main">
-              <Route path="/home" component={Home} exact />
-              <Route path="/poducts" component={Product}  />
-              <Route path="/orders" component={Order}  />
-              <Route path="/addNewUser" component={User}  />
-              <Route path="/logout" component={Logout}  />
-              <Redirect from="/" to="/home" exact />
-            
-          
-            </IonRouterOutlet>
-            
-          </IonSplitPane>
-          
-          )/* : isAuth && companies === null ? (
-            <div>
-              <Company id = {userID}/>
-            </div>
-          ) */: (
-            
-            <div className='row'>
-        
-              <Router>
-              
-                  
-                <Switch>
-                  
-                  <Route path="/register"  component={Register} />
-                  <Route path="/login"  component={Login} />
-                  <Redirect from="/" to="/login" exact />
-                </Switch>
-                <Link to="/register">Register </Link>
+    console.log("token : ", token)
+    console.log(localStorage.getItem('user'))
+    return (
+        <IonApp>
+          <IonReactRouter>
+            <IonSplitPane contentId="main">
+              <Menu />
+              <IonRouterOutlet id="main">
+              {
+                this.state.isAuth  /*&& companies !==null */ ? 
                 
-              </Router>
-              
-            </div>
-          )
-          }
-        </IonReactRouter>
-      </IonApp>
-
-  );
+                <>
+                    <Route path="/home" component={Home} exact />
+                    <Route path="/poducts" component={Product}  />
+                    <Route path="/orders" component={Order}  />
+                    <Route path="/addNewUser" component={User}  />
+                    <Route path="/logout" component={Logout}  />
+                    <Redirect from="/" to="/home" exact />
+                  </> : 
+                  <>
+                    {/* <Redirect from="/" to="/login" exact />
+                    <Route path="/register"  component={Register} /> */}
+                    <Route path="/login"  component={Login} exact />
+                    <Redirect from="*" to="/login" />
+                  </>
+              }
+              </IonRouterOutlet>
+            </IonSplitPane>
+          </IonReactRouter>
+        </IonApp>
+    )
+  }
 }
-};
 
 const mapStateToProps = (state:any) => {
   return {
@@ -123,3 +101,38 @@ const mapStateToProps = (state:any) => {
 }
 
 export default connect(mapStateToProps)(App);
+
+{/* 
+  // console.log("Token : ",token)
+    // console.log("Companies : ",companies)
+
+    // var userID = ''
+    // if(user !== null){
+    //   userID = user._id
+    // }
+
+    const userID = (user !== null ) ? user.map((item:any,key:any) => {
+      
+      return item._id
+    }) : '0'
+  //   console.log(userID)
+  //   var isAuth = false
+  //  // var getCompanies = companies
+  //   if (user !== null) {
+  //     isAuth = true
+  //   
+isAuth && companies === null ? (
+            <div>
+              <Company id = {userID}/>
+            </div>
+          ) 
+          
+              <Switch>
+                  <Route path="/register"  component={Register} />
+                  <Route path="/login"  component={Login} />
+                   <Redirect from="/" to="/login" exact />
+                </Switch>
+                 <Link to="/register">Register </Link>
+                <div className='row'>
+            </div> */}
+          

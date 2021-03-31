@@ -5,20 +5,15 @@ class Logout extends React.Component<{history : any,userLogout : any},{}>{
 
   constructor (props:any) {
     super(props)
-   this.logout()
-   
-    this.state = {
-       
-    }
-}
+    
+  }
 
-logout = () => {
-    localStorage.clear()
+  componentDidMount() {
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
     this.props.userLogout()
     this.props.history.push('/login')
-}
-
-
+  }
 
 
 render() {
@@ -34,7 +29,6 @@ const mapDispatchToProps = (dispatch:any) => {
       userLogout : () => {
         dispatch({
           type : 'LOGOUT'
-          
         })
       }
     }

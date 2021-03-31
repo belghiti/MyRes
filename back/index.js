@@ -15,29 +15,22 @@ const categoriesCompany = require('./routes/categories_company')
 const productCategory = require('./routes/categories_product')
 const order = require("./routes/orders")
 const orderEntries = require("./routes/order_entries")
-/*const collection = db.collection('Product');
-const changeStream = collection.watch();
-changeStream.on('change', next => {
-  console.log('Product stream')
-});*/
+
 dotenv.config();
 
 // Connect to DB
 
-mongoose.connect(
+let db = mongoose.connect(
     process.env.DB_CONNECT,
     { 
         useUnifiedTopology: true,
         useNewUrlParser: true 
      } ,
     
-   /* (db) => {
-      const changeStream = db("product").collection("Product").watch();
-        changeStream.on("change", next => {
-          console.log(next);
-      });*/
+
         console.log('connected to database')
 );
+
 app.use(cors({credentials: true, origin: ['http://localhost:8100','http://localhost:3000']}));
 
 //Middleware
