@@ -58,7 +58,7 @@ const appPages: AppPage[] = [
   //  component:<LineChart />
   },
   {
-    title: 'Ajouter un travailleur',
+    title: 'Déconnecter',
     url: '/logout',
     iosIcon: mailOutline,
     mdIcon: mailSharp,
@@ -105,8 +105,7 @@ const Menu: React.FC = () => {
           
          
                  
-                  <IonLabel >Déconnecté</IonLabel>
-             
+              
         </IonList>
 
         

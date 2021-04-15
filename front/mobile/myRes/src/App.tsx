@@ -34,9 +34,6 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { imageSharp } from 'ionicons/icons';
-import { stat } from 'fs';
-const queryClient = new QueryClient()
 
 class App extends React.Component<{user : any,token: string,companies: string},{isAuth:any}> {
   constructor(props:any){
@@ -44,16 +41,18 @@ class App extends React.Component<{user : any,token: string,companies: string},{
     this.state = {
       isAuth : false
     }
+    //window.location.reload()
   }
   componentDidMount() {
-      this.setState({
-        isAuth : localStorage.getItem('user') !== null && localStorage.getItem('token') !== null
-      })
+      /*this.setState({
+        isAuth : JSON.parse(localStorage.getItem('user')+'') !== null && localStorage.getItem('token') !== null
+      })*/
+      
   }
 
-  componentDidUpdate(prevState:any,actState:any) {
+  componentDidUpdate(prevProps:any,prevState:any) {
     console.log(prevState)
-    console.log(actState)
+   /* console.log(actState)*/
   }
 
   render() {
@@ -64,12 +63,11 @@ class App extends React.Component<{user : any,token: string,companies: string},{
         <IonApp>
           <IonReactRouter>
             <IonSplitPane contentId="main">
-              <Menu />
+             <Menu />
               <IonRouterOutlet id="main">
-              {
-                this.state.isAuth  /*&& companies !==null */ ? 
-                
-                <>
+              {  token || JSON.parse(localStorage.getItem('user')+'') !== null && localStorage.getItem('token') !== null/*this.state.isAuth */  /*&& companies !==null */ ? 
+               
+                <> 
                     <Route path="/home" component={Home} exact />
                     <Route path="/poducts" component={Product}  />
                     <Route path="/orders" component={Order}  />
@@ -78,8 +76,7 @@ class App extends React.Component<{user : any,token: string,companies: string},{
                     <Redirect from="/" to="/home" exact />
                   </> : 
                   <>
-                    {/* <Redirect from="/" to="/login" exact />
-                    <Route path="/register"  component={Register} /> */}
+                  
                     <Route path="/login"  component={Login} exact />
                     <Redirect from="*" to="/login" />
                   </>
