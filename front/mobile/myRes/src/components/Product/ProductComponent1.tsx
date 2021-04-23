@@ -81,19 +81,6 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
                 product : data.data
             })
         })
-
-      /*  const { isLoading, error , data } = useQuery('repoData', () =>
-        axios.get(`http://localhost:3001/api/product/${this.props.user._id}`).then(data =>
-        {
-            console.log(data)
-            this.setState({
-                product : data.data
-            })
-        } )
-      
-   )
-   if (isLoading) return 'Loading...'
-   if (error) return 'An error has occurred: ' + error*/
     }
 
      get_All_Categories_Product = () => {
@@ -146,8 +133,8 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
             
            showPopover : false
         })
-     
-              
+        alert('Le produit été ajouter')
+        this.allProduct()
              
       })
       .catch( (error:any) => {
@@ -188,12 +175,18 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
             
                 showPopover2 : false
              })
-          
+             alert('Le produit été modifier')
+             this.allProduct()
                  
         })
         }
     deleteProduct = (id:any) => {
-        return axios.delete(`http://localhost:3001/api/product/delete/${id}`).then(res=>{console.log('Delete : ',res)})
+        return axios.delete(`http://localhost:3001/api/product/delete/${id}`)
+                    .then(res=>
+                        {console.log('Delete : ',res)
+                        alert('le produit été supprimer avec succes')
+                        this.allProduct()
+                        })
     }
     render() { 
        

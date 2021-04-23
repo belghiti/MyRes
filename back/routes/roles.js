@@ -25,4 +25,14 @@ router.post('/add',async (req,res) => {
      }
 })
 
+router.get('/user',async (req,res) => {
+
+    /* const { error } = registerValidation(req.body);
+      if(error) return res.status(400).send(error.details[0].message)*/
+ 
+     const role = await Role.find({role : 'User_test'});
+        res.send(role);
+     
+ })
+
 module.exports = router

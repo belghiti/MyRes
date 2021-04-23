@@ -35,11 +35,12 @@ class App extends Component {
   get_Product = (category) => {
     if(this.props.user !== null) {
     return axios.get(`http://localhost:3001/api/product/${this.props.user.worksAt[0].id}/${category}`).then(data => {
-
+        
       this.setState({
         product_cat : data.data
       })
     })
+
   }
   }
 
@@ -208,7 +209,7 @@ class App extends Component {
                           <img src={(item.productImage !== undefined) ? 'http://localhost:3001/'+ item.productImage : "https://www.anonymapparel.com/wp-content/plugins/woocommerce/assets/images/placeholder.png"} className="img-fluid"></img>
                         </div> 
                     
-                   
+                    </div>
                     <div className="product-detail-container">
                         <div className="d-flex justify-content-between align-items-center">
                             <h6 className="mb-0">{item.name}</h6> 
@@ -221,7 +222,7 @@ class App extends Component {
                           <button onClick={()=>this.add_Cart(item._id,item.name,item.price,item.quantity)} className="btn btn-primary btn-block">Ajouter</button> 
                         </div>
                     </div>
-                       </div>
+                      
                 </div>
               
             </div>

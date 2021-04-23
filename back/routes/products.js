@@ -108,14 +108,14 @@ router.get('/',async (req,res) => {
 
  router.get('/:id/:category',async (req,res) => {
 
-
+// id user get worksAt
     const categry_product = await Product.find({
       id_User: req.params.id,
       category_Product_id:req.params.category
       
     })
     .populate({path : "category_Product_id",select : 'name'}).exec()
-
+    // ,{path:"id_User",select:"worksAt"}
     if(!categry_product) return res.status(400).send("Category not exist")
     console.log(categry_product)
     console.log(categry_product.CategoryProduct)

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 function BarChart(props : any) {
     let [order_day, setorder_day] = useState([]);
+    let [order_month, setorder_month] = useState([]);
     //let user: any = JSON.parse(localStorage.getItem('user')+'')
     
     
@@ -23,14 +24,25 @@ function BarChart(props : any) {
               
           };
 
+          const getOrderMonth =  () => {
+            
+            axios
+            .get(`http://localhost:3001/api/order/monthly-stats/${userId}`)
+            
+            .then(res => {setorder_month(res.data);})
+            .catch((error) => console.log(error.resp));
+            
+        };
+          ///monthly-stats/:id
+
           getOrderDay();
-         
+          getOrderMonth();
     },[])
   
     
     //console.log(props.user._id)
    
-
+    console.log(order_month)
     const arrOrd= order_day.map((item: any,key : any)=> {
                     let ttl = 0
                   

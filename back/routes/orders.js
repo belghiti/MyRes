@@ -23,7 +23,7 @@ router.post('/add',async (req,res) => {
 
 router.get('/:id',async (req,res) => {
   const week = moment().subtract(0, 'days').format('DD-MM-YYYY')
-  console.log('Week : ',week)
+ 
     const allOrders= await Order.find({user_id: req.params.id}) 
     .populate({ path: 'user_id', select: 'name' })
 
@@ -54,28 +54,32 @@ const date_6 = moment().subtract(dt+6, 'days').format('DD-MM-YYYY')
   //const order_day = await Order.find({date:req.params.date})
 
   //if(!order_day) return res.status(400).send("This order not exist")
-  console.log(order_day0)
+ // console.log(order_day0)
   res.send([order_day0,order_day1,order_day2,order_day3,order_day4,order_day5,order_day6])
 }
 
 })
 
 router.get('/monthly-stats/:id',async (req,res) => {
-  // const dateWithoutEspace = req.params.date.replace()
   var dt = 0
- //const week = moment().subtract(7, 'days').format('DD-MM-YYYY')
- const ordr = await Order.find({user_id: req.params.id}) 
- if(ordr) {
+  const ordr = await Order.find({user_id: req.params.id}) 
+  if(ordr) {
+    const date_0 = moment().subtract(dt, 'months').format('01-MM-YYYY')
+    const date_1 = moment().subtract(dt+1, 'months').format('01-MM-YYYY')
+    const order_day1 = await Order.find({date:{$gte : date_0}})
+
+    console.log(order_day1)
+    console.log(date_0)
+    console.log(date_1)
+  
+    res.send([order_day1])
  
-   
-   //console.log(moment([2014, 0, 31]).diff(moment([2013, 9, 31]), 'days', true))
-   
- }
+  }
  
  })
 
 /* router.put('/update/:id',async (req,res) => {
-
+ 
     return Product.findById(req.params.id, function (err, product) {
         product.name = req.body.name;
         product.price = req.body.price;

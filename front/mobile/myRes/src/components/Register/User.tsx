@@ -39,7 +39,7 @@ class Register extends React.Component<ProductComponentProps, ProductComponentSt
     constructor (props:any) {
         super(props)
         this.state = {
-          role_id : "6033c08635b02121a04465ec",
+          role_id : "",
           name: "",
           email : "",
           phone_number : "",
@@ -48,7 +48,14 @@ class Register extends React.Component<ProductComponentProps, ProductComponentSt
           user_id : ""
        }
     }
-
+get_order = () => {
+  return axios.get('http://localhost:3001/api/role/user').then( data => {
+    console.log(data.data);
+    this.setState({
+      role_id : data.data._id
+    })
+  })
+}
     register_user = (ev : any)=> {
       ev.preventDefault();
       axios.post('http://localhost:3001/api/user/register',{
@@ -108,6 +115,10 @@ class Register extends React.Component<ProductComponentProps, ProductComponentSt
               <Link to="/register">Register </Link>
               </Router>*/
   }
+
+  componentDidMount () {
+    this.get_order()
+  }
     
 render() {
 
@@ -115,18 +126,17 @@ render() {
   return (
     <div>
     <IonHeader>
-        <IonToolbar>
-      <IonButtons slot="start">
-      <Router>
-      <Switch>
-<Route path="/login"  component={Login} />
-        </Switch>
-      
-      </Router>
-        <IonBackButton defaultHref='/login' />
-      </IonButtons>
-      <IonTitle>Créer votre compte</IonTitle>
-    </IonToolbar>
+      <IonToolbar>
+        <IonButtons slot="start">
+          <Router>
+            <Switch>
+              <Route path="/login"  component={Login} />
+            </Switch>
+          </Router>
+          <IonBackButton defaultHref='/login' />
+        </IonButtons>
+        <IonTitle>Créer votre compte</IonTitle>
+      </IonToolbar>
     </IonHeader>
   
   
