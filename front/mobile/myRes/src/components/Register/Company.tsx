@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-
 import {
   IonContent,
   IonIcon,
@@ -14,10 +13,12 @@ import {
   IonButton,
   IonSelect,
   IonSelectOption,
-  IonBackButton, IonHeader, IonToolbar, IonButtons, IonMenuButton
+  IonBackButton, IonHeader, IonToolbar, IonButtons, IonMenuButton,
+  IonPage, IonTitle,IonFooter 
  // withIonLifeCycle 
 } from '@ionic/react';
-
+import { Redirect, Route,Link, BrowserRouter as Router,Switch  } from 'react-router-dom';
+import Login from '../Auth/Login'
 class Company extends React.Component<{user : any,id:any},{selectOptions:any,currency:any,catCompany : any,name:any,category_company_id : any,id_User:any}>  {
     constructor (props:any) {
         super(props)
@@ -30,12 +31,9 @@ class Company extends React.Component<{user : any,id:any},{selectOptions:any,cur
           currency:''
           
         }
-
-        
-      console.log("Props ID : ", this.props.id)
     }
     
-
+// Add company to db //
 allCatCompany = () => {
  
   return axios.get('http://localhost:3001/api/categComp').then(data  => {
@@ -52,6 +50,7 @@ allCatCompany = () => {
       category_company_id : data.data._id
     })
     console.log(option)
+    console.log(this.props)
   })
 }
 
@@ -105,16 +104,19 @@ const lisCatCompany = this.state.catCompany
 
   return (
     <div>
-    <IonContent>
-    {/*-- Default back button --*/}
     <IonHeader>
       <IonToolbar>
         <IonButtons slot="start">
-          <IonBackButton />
+          <Router>
+            <Switch>
+              <Route path="/login"  component={Login} />
+            </Switch>
+          </Router>
+          <IonBackButton defaultHref='/login' />
         </IonButtons>
+        <IonTitle>Créer votre compte</IonTitle>
       </IonToolbar>
     </IonHeader>
-    </IonContent>
     <form className="ion-padding" onSubmit={this.handleSubmit}>
     <IonItem>
       <IonLabel position="floating">Nom socieété</IonLabel>
@@ -129,6 +131,12 @@ const lisCatCompany = this.state.catCompany
         {optionSelect}
       </IonSelect>
       
+    </IonItem>
+
+    <IonItem>
+      <IonLabel position="floating">Devise</IonLabel>
+      
+      <IonInput value={this.state.currency} onChange={this.handleChange}/>
     </IonItem>
 
     
@@ -148,7 +156,16 @@ const mapStateToProps = (state:any) => {
       categoryCompanies : state.catCompany.categoryCompanies
   }
 }
- 
 
-
-export default connect(mapStateToProps)(Company);
+const mapDispatchToProps = (dispatch:any) => {
+  return {
+    userCompany : (companies : any) => {
+      dispatch({
+        type : 'GET_COMPANIES',
+        companies : companies.companies
+        
+      })
+    }
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Company);

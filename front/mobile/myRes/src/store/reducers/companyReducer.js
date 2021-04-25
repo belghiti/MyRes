@@ -6,10 +6,6 @@ const companyReducer = (state = initState, action) => {
     switch(action.type) {
        
         case 'GET_COMPANIES':
-                
-            //state.token = action.token
-            //state.user = action.user
-            //console.log(state)
             return {
                 ...state,
                 companies: action.companies

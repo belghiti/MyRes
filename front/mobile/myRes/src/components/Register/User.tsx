@@ -31,8 +31,6 @@ export interface ProductComponentState {
   email : any,
   phone_number : any,
   password: any,
- 
-  tel : any,
   user_id : any
 }
 class Register extends React.Component<ProductComponentProps, ProductComponentState> {
@@ -42,9 +40,8 @@ class Register extends React.Component<ProductComponentProps, ProductComponentSt
           role_id : "",
           name: "",
           email : "",
-          phone_number : "",
+          phone_number : null,
           password:"",
-          tel : "",
           user_id : ""
        }
     }
@@ -67,7 +64,7 @@ get_order = () => {
 
       }).then(data=>
           {console.log("Le travailleur ete enregistrer avec succes : ",data.data)
-          axios.post('http://localhost:3001/api/user/login', {email : this.state.email,password : this.state.password})
+        /*  axios.post('http://localhost:3001/api/user/login', {email : this.state.email,password : this.state.password})
       .then( (response:any) => {
         
             console.log(response);
@@ -79,17 +76,18 @@ get_order = () => {
       .catch( (error:any) => {
         console.log(error);
     
-      });
+      });*/
+      
           this.setState({
-              role_id : "6033c08635b02121a04465ec",
+              role_id : "",
               name: "",
               email : "",
-              phone_number : "",
+              phone_number : null,
               password:"",
               user_id : data.data._id
            })
       })
-          
+      this.props.history.push('/company')
   }
 
   handleChange = (ev:any) =>{
@@ -102,27 +100,12 @@ get_order = () => {
     
 
   }
-  next_page = () => {
-   /* <Router>
-            
-                
-              <Switch>
-                
-                <Route path="/register"  component={Company} />
-               
-                <Redirect from="/" to="/login" exact />
-              </Switch>
-              <Link to="/register">Register </Link>
-              </Router>*/
-  }
-
+ 
   componentDidMount () {
     this.get_order()
   }
     
 render() {
-
-    
   return (
     <div>
     <IonHeader>
@@ -140,16 +123,16 @@ render() {
     </IonHeader>
   
   
-  { /*onSubmit={this.register_user}*/}
+
   
-<form className="ion-padding" >
+<form className="ion-padding" onSubmit={this.register_user}>
 <IonItem>
   <IonLabel position="floating">Votre nom et prenom </IonLabel>
   <IonInput name="name" value={this.state.name} onIonChange={(e:any)=>this.handleChange(e)}/>
 </IonItem>
 <IonItem>
   <IonLabel position="floating">Numéro de telephone</IonLabel>
-  <IonInput name="tel" value={this.state.tel} onIonChange={(e:any)=>this.handleChange(e)} />
+  <IonInput name="phone_number" value={this.state.phone_number} onIonChange={(e:any)=>this.handleChange(e)} />
 </IonItem>
 <IonItem>
   <IonLabel position="floating">Email</IonLabel>
@@ -164,9 +147,7 @@ render() {
   <IonInput type="password" name="confimePassword"   />
 </IonItem>
 
-<IonButton className="ion-margin-top" type="submit" expand="block" onClick={()=>{
-  this.next_page()
-}}>
+<IonButton className="ion-margin-top" type="submit" expand="block">
   Suivant
 </IonButton>
 

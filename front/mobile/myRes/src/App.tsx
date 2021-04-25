@@ -58,35 +58,52 @@ class App extends React.Component<{user : any,token: string,companies: string},{
   render() {
     const {user,token,companies} = this.props
     console.log("token : ", token)
-    console.log(localStorage.getItem('user'))
+    console.log("companies : ", companies)
     return (
+      
         <IonApp>
           <IonReactRouter>
-              {  token || JSON.parse(localStorage.getItem('user')+'') !== null && localStorage.getItem('token') !== null/*this.state.isAuth */  /*&& companies !==null */ ? 
-               
-            <IonSplitPane contentId="main">
-              
-             <Menu />
-              <IonRouterOutlet id="main">
-                <> 
-                    <Route path="/home" component={Home} exact />
-                    <Route path="/poducts" component={Product}  />
-                    <Route path="/orders" component={Order}  />
-                    <Route path="/addNewUser" component={User}  />
-                    <Route path="/logout" component={Logout}  />
-                    <Redirect from="/" to="/home" exact />
-                  </> 
-              </IonRouterOutlet>
-            </IonSplitPane> :
+         { companies !== null && token !== null ?
             <>
-              <Route path="/login"  component={Login} exact />
+              { token || JSON.parse(localStorage.getItem('user')+'') !== null && localStorage.getItem('token') !== null ? 
+              <IonSplitPane contentId="main">
+              <Menu />
+                <IonRouterOutlet id="main">
+                  <> 
+                      <Route path="/home" component={Home} exact />
+                      <Route path="/poducts" component={Product}  />
+                      <Route path="/orders" component={Order}  />
+                      <Route path="/addNewUser" component={User}  />
+                      <Route path="/logout" component={Logout}  />
+                      <Redirect from="/" to="/home" exact />
+                    </> 
+                </IonRouterOutlet>
+              </IonSplitPane> :
+              <>
+                <Route path="/login"  component={Login} exact />
+                <Route path="/register"  component={Register} />
+                <Route path="/company"  component={Company} />
+                <Redirect from="*" to="/login" />
+                <Link to="/register">Register </Link>
+              </>  
+            } 
+           </> 
+           : companies === null && token !== null ?
+          <>
+            <Route path="/company"  component={Company} />
+            <Redirect from="*" to="/company" />
+          </> : 
+          <>
+          <Route path="/login"  component={Login} exact />
               <Route path="/register"  component={Register} />
+          
               <Redirect from="*" to="/login" />
               <Link to="/register">Register </Link>
-            </>    
-          }
+          </>
+        }
           </IonReactRouter>
-        </IonApp>
+        </IonApp> 
+
     )
   }
 }
