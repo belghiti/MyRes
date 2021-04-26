@@ -19,7 +19,7 @@ import {
 } from '@ionic/react';
 import { Redirect, Route,Link, BrowserRouter as Router,Switch  } from 'react-router-dom';
 import Login from '../Auth/Login'
-class Company extends React.Component<{user : any,id:any},{selectOptions:any,currency:any,catCompany : any,name:any,category_company_id : any,id_User:any}>  {
+class Company extends React.Component<{user : any,id:any,userCompany : any},{selectOptions:any,currency:any,catCompany : any,name:any,category_company_id : any,id_User:any}>  {
     constructor (props:any) {
         super(props)
         this.state = {
@@ -33,7 +33,7 @@ class Company extends React.Component<{user : any,id:any},{selectOptions:any,cur
         }
     }
     
-// Add company to db //
+
 allCatCompany = () => {
  
   return axios.get('http://localhost:3001/api/categComp').then(data  => {
@@ -45,7 +45,7 @@ allCatCompany = () => {
     
     this.setState({
       selectOptions : option,
-      id_User:this.props.id,
+      id_User:this.props.user._id,
       catCompany:data.data,
       category_company_id : data.data._id
     })
@@ -60,7 +60,7 @@ componentDidMount(){
 }
 
 handleChange = (ev:any) =>{
- 
+  console.log(ev.target.value) 
   this.setState({
     ...this.state,
    [ev.target.name]: ev.target.value,
@@ -75,10 +75,16 @@ handleSubmit = (ev:any) => {
 console.log(this.state) 
 
 
-  axios.post('http://localhost:3001/api/company/add', {id_User : this.state.id_User,name_company : this.state.name, category_company: this.state.category_company_id})
+  axios.post('http://localhost:3001/api/company/add', 
+    { id_User : this.state.id_User,
+      name_company : this.state.name, 
+      category_company: this.state.category_company_id,
+      currency:this.state.currency
+    })
   .then( (response:any) => {
     
         console.log(response);
+        this.props.userCompany(response.data)
          // this.props.userLogin(response.data.token,response.data.user);
           // Redirection
         // this.props.history.push('/')
@@ -117,17 +123,17 @@ const lisCatCompany = this.state.catCompany
         <IonTitle>Créer votre compte</IonTitle>
       </IonToolbar>
     </IonHeader>
-    <form className="ion-padding" onSubmit={this.handleSubmit}>
+    <form className="ion-padding" onSubmit={(e)=>this.handleSubmit(e)}>
     <IonItem>
       <IonLabel position="floating">Nom socieété</IonLabel>
       
-      <IonInput value={this.state.name} onChange={this.handleChange}/>
+      <IonInput value={this.state.name} name="name" onIonChange={(e)=>this.handleChange(e)}/>
     </IonItem>
 
     <IonItem>
       <IonLabel position="floating">Catégories</IonLabel>
 
-      <IonSelect value={this.state.category_company_id} onChange={this.handleChange}>
+      <IonSelect value={this.state.category_company_id} name="category_company_id"  onIonChange={(e)=>this.handleChange(e)}>
         {optionSelect}
       </IonSelect>
       
@@ -136,12 +142,12 @@ const lisCatCompany = this.state.catCompany
     <IonItem>
       <IonLabel position="floating">Devise</IonLabel>
       
-      <IonInput value={this.state.currency} onChange={this.handleChange}/>
+      <IonInput value={this.state.currency} name="currency" onIonChange={(e)=>this.handleChange(e)}/>
     </IonItem>
 
     
     <IonButton className="ion-margin-top" type="submit" expand="block">
-      Suivant
+      Enregistrer
     </IonButton>
     </form>
     </div>

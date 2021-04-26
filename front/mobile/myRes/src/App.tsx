@@ -76,7 +76,7 @@ class App extends React.Component<{user : any,token: string,companies: string},{
                       <Route path="/addNewUser" component={User}  />
                       <Route path="/logout" component={Logout}  />
                       <Redirect from="/" to="/home" exact />
-                    </> 
+                  </> 
                 </IonRouterOutlet>
               </IonSplitPane> :
               <>
@@ -118,37 +118,4 @@ const mapStateToProps = (state:any) => {
 
 export default connect(mapStateToProps)(App);
 
-{/* 
-  // console.log("Token : ",token)
-    // console.log("Companies : ",companies)
-
-    // var userID = ''
-    // if(user !== null){
-    //   userID = user._id
-    // }
-
-    const userID = (user !== null ) ? user.map((item:any,key:any) => {
-      
-      return item._id
-    }) : '0'
-  //   console.log(userID)
-  //   var isAuth = false
-  //  // var getCompanies = companies
-  //   if (user !== null) {
-  //     isAuth = true
-  //   
-isAuth && companies === null ? (
-            <div>
-              <Company id = {userID}/>
-            </div>
-          ) 
-          
-              <Switch>
-                  <Route path="/register"  component={Register} />
-                  <Route path="/login"  component={Login} />
-                   <Redirect from="/" to="/login" exact />
-                </Switch>
-                 <Link to="/register">Register </Link>
-                <div className='row'>
-            </div> */}
           

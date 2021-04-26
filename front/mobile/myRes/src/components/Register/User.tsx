@@ -64,6 +64,7 @@ get_order = () => {
 
       }).then(data=>
           {console.log("Le travailleur ete enregistrer avec succes : ",data.data)
+          this.props.userLogin(data.data.token,data.data.user)
         /*  axios.post('http://localhost:3001/api/user/login', {email : this.state.email,password : this.state.password})
       .then( (response:any) => {
         
@@ -158,6 +159,7 @@ render() {
   );
 }
 };
+//Error ID in company.tsx
 const mapDispatchToProps = (dispatch:any) => {
   return {
     userLogin : (token:any,user:any) => {
@@ -165,7 +167,6 @@ const mapDispatchToProps = (dispatch:any) => {
         type : 'LOGIN_USER',
         token : token,
         user : user
-        
       })
     }
   }
