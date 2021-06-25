@@ -74,8 +74,9 @@ class ProductComponent extends React.Component<ProductComponentProps, ProductCom
    
     
     allProduct = () => {
-        const userId = this.props.user === null ? JSON.parse(localStorage.getItem('user')+'')._id : this.props.user
-        axios.get(`http://localhost:3001/api/product/${userId}`).then( data => {
+        // === null ? JSON.parse(localStorage.getItem('user')+'')._id : this.props.user
+        const userId = this.props.user
+        axios.get(`http://localhost:3001/api/product/${userId._id}`).then( data => {
             console.log(data)
             this.setState({
                 product : data.data

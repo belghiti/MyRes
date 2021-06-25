@@ -29,13 +29,24 @@ router.get('/:id',async (req,res) => {
 
     res.send(allOrders)
  })
+ router.delete('/delete/:id',async (req,res) => {
 
+  return Product.findById(req.params.id, function (err, product) {
+      return product.remove(function (err) {
+        if (!err) {
+          console.log("removed");
+          return res.send('');
+        } else {
+          console.log(err);
+        }
+      });
+    });
+})
  router.get('/daily-stats/:id',async (req,res) => {
  // const dateWithoutEspace = req.params.date.replace()
  var dt = 0
 //const week = moment().subtract(7, 'days').format('DD-MM-YYYY')
-const ordr = await Order.find({user_id: req.params.id}) 
-if(ordr) {
+
   const date_0 = moment().subtract(dt, 'days').format('DD-MM-YYYY')
 const date_1 = moment().subtract(dt+1, 'days').format('DD-MM-YYYY')
 const date_2 = moment().subtract(dt+2, 'days').format('DD-MM-YYYY')
@@ -44,19 +55,19 @@ const date_4 = moment().subtract(dt+4, 'days').format('DD-MM-YYYY')
 const date_5 = moment().subtract(dt+5, 'days').format('DD-MM-YYYY')
 const date_6 = moment().subtract(dt+6, 'days').format('DD-MM-YYYY')
 
-  const order_day0 = await Order.find({date:date_0})
-  const order_day1 = await Order.find({date:date_1})
-  const order_day2 = await Order.find({date:date_2})
-  const order_day3 = await Order.find({date:date_3})
-  const order_day4 = await Order.find({date:date_4})
-  const order_day5 = await Order.find({date:date_5})
-  const order_day6 = await Order.find({date:date_6})
+  const order_day0 = await Order.find({date:date_0,user_id: req.params.id})
+  const order_day1 = await Order.find({date:date_1,user_id: req.params.id})
+  const order_day2 = await Order.find({date:date_2,user_id: req.params.id})
+  const order_day3 = await Order.find({date:date_3,user_id: req.params.id})
+  const order_day4 = await Order.find({date:date_4,user_id: req.params.id})
+  const order_day5 = await Order.find({date:date_5,user_id: req.params.id})
+  const order_day6 = await Order.find({date:date_6,user_id: req.params.id})
   //const order_day = await Order.find({date:req.params.date})
 
   //if(!order_day) return res.status(400).send("This order not exist")
  // console.log(order_day0)
   res.send([order_day0,order_day1,order_day2,order_day3,order_day4,order_day5,order_day6])
-}
+
 
 })
 

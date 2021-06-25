@@ -13,8 +13,6 @@ import { IonApp, IonRouterOutlet, IonSplitPane, IonFooter } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route,Link, BrowserRouter as Router,Switch  } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
- 
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -38,9 +36,6 @@ import './theme/variables.css';
 class App extends React.Component<{user : any,token: string,companies: string},{isAuth:any}> {
   constructor(props:any){
     super(props);
-    this.state = {
-      isAuth : false
-    }
     //window.location.reload()
   }
   componentDidMount() {
@@ -58,14 +53,15 @@ class App extends React.Component<{user : any,token: string,companies: string},{
   render() {
     const {user,token,companies} = this.props
     console.log("token : ", token)
-    console.log("companies : ", companies)
+    console.log("user : ", user)
+    
+    //|| JSON.parse(localStorage.getItem('user')+'') !== null && localStorage.getItem('token') !== null (previous token)
     return (
       
         <IonApp>
           <IonReactRouter>
-         { companies !== null && token !== null ?
-            <>
-              { token || JSON.parse(localStorage.getItem('user')+'') !== null && localStorage.getItem('token') !== null ? 
+       
+              { token  ? 
               <IonSplitPane contentId="main">
               <Menu />
                 <IonRouterOutlet id="main">
@@ -86,21 +82,9 @@ class App extends React.Component<{user : any,token: string,companies: string},{
                 <Redirect from="*" to="/login" />
                 <Link to="/register">Register </Link>
               </>  
-            } 
-           </> 
-           : companies === null && token !== null ?
-          <>
-            <Route path="/company"  component={Company} />
-            <Redirect from="*" to="/company" />
-          </> : 
-          <>
-          <Route path="/login"  component={Login} exact />
-              <Route path="/register"  component={Register} />
-          
-              <Redirect from="*" to="/login" />
-              <Link to="/register">Register </Link>
-          </>
-        }
+           
+  }
+        
           </IonReactRouter>
         </IonApp> 
 

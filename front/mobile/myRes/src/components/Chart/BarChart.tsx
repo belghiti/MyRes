@@ -4,27 +4,37 @@ import {Line} from 'react-chartjs-2';
 import moment from 'moment';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { State } from 'ionicons/dist/types/stencil-public-runtime';
 
 function BarChart(props : any) {
     let [order_day, setorder_day] = useState([]);
     let [order_month, setorder_month] = useState([]);
     //let user: any = JSON.parse(localStorage.getItem('user')+'')
     
-    
+    const {user,token} = props
+    console.log("token : ", token)
+    console.log("user : ", user)
      useEffect(()=>{
-        const userId = props.user === null ? JSON.parse(localStorage.getItem('user')+'')._id : props.user._id
-        console.log(userId)
+        const userId = props.user === null ? JSON.parse(localStorage.getItem('user')+'').users : props.user.users
+        const users = props.user === null ? JSON.parse(localStorage.getItem('user')+'').users : props.user.users
+        console.log(users)
         const getOrderDay =  () => {
-            
-              axios
-              .get(`http://localhost:3001/api/order/daily-stats/${userId}`)
+          
+            for(let i=0;i<userId.length;i++){
+                console.log(i)
+                let s : any
+                axios
+              .get(`http://localhost:3001/api/order/daily-stats/${userId[i].id}`)
               
-              .then(res => {setorder_day(res.data);})
+              .then(res => {setorder_day(res.data) ; 
+                
+                console.log(res.data)})
+              
               .catch((error) => console.log(error.resp));
-              
+            }
           };
 
-          const getOrderMonth =  () => {
+        /*  const getOrderMonth =  () => {
             
             axios
             .get(`http://localhost:3001/api/order/monthly-stats/${userId}`)
@@ -32,15 +42,13 @@ function BarChart(props : any) {
             .then(res => {setorder_month(res.data);})
             .catch((error) => console.log(error.resp));
             
-        };
+        };*/
           ///monthly-stats/:id
 
           getOrderDay();
-          getOrderMonth();
+         // getOrderMonth();
     },[])
-  
-    
-    //console.log(props.user._id)
+
    
     console.log(order_month)
     const arrOrd= order_day.map((item: any,key : any)=> {

@@ -30,7 +30,7 @@ const validEmailRegex =
     );
     return valid;
   }
-class Login extends React.Component<{userLogin:any,match:any, history: any},{redirect: any, email : string,password: string,formErrors:any}>{
+class Login extends React.Component<{userLogin:any,match:any, history: any},{ email : string,password: string,formErrors:any}>{
 
   constructor (props:any) {
     super(props)
@@ -40,8 +40,7 @@ class Login extends React.Component<{userLogin:any,match:any, history: any},{red
         formErrors: {
           email: "",
           password: ""
-        },
-        redirect: false
+        }
     }
 }
 
@@ -90,7 +89,7 @@ handleSubmit = (ev:any) => {
             // if(re)
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
-            this.setState({...this.state, redirect: true})
+           // this.setState({...this.state, redirect: true})
       })
       .catch( (error:any) => {
         console.log(error);
@@ -106,8 +105,7 @@ handleSubmit = (ev:any) => {
 
   render() {
     const {formErrors} = this.state;
-    return this.state.redirect ? <Redirect to="/home" /> : (
-      <form className="ion-padding "  onSubmit={this.handleSubmit}>
+    return <form className="ion-padding "  onSubmit={this.handleSubmit}>
           <IonItem>
             <IonLabel position="floating">Email</IonLabel>
             <IonInput 
@@ -146,7 +144,7 @@ handleSubmit = (ev:any) => {
           
       
       </form>
-    );
+    
   }
 };
 
