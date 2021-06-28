@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const { registerValidation, loginValidation} = require('../validation');
+const security = require('../../middlewares/security');
 //Registre
 
 router.post('/register',async (req,res) => {
@@ -54,7 +55,7 @@ router.post('/login', async (req,res) => {
  
 })
 
-router.put("/edit_admin/:id",async (req,res)=> {
+router.put("/edit_admin/:id",security.checkJWT,async (req,res)=> {
     const findUser = await User.findById({_id : req.params.id})
     if(!findUser) return res.status(401).send('user not found');
     console.log(findUser)
@@ -72,7 +73,7 @@ router.put("/edit_admin/:id",async (req,res)=> {
     
 })
 
-router.put("/edit_worker/:id",async (req,res)=> {
+router.put("/edit_worker/:id",security.checkJWT,async (req,res)=> {
     const findUser = await User.findById({_id : req.params.id})
     if(!findUser) return res.status(401).send('user not found');
     console.log(findUser)
@@ -90,7 +91,7 @@ router.put("/edit_worker/:id",async (req,res)=> {
     
 })
 
-router.get("/:id",async (req,res)=> {
+router.get("/:id",security.checkJWT,async (req,res)=> {
     const findUser = await User.findById({_id : req.params.id})
     if(!findUser) return res.status(401).send('user not found');
     console.log(findUser)

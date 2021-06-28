@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { State } from 'ionicons/dist/types/stencil-public-runtime';
 
 function BarChart(props : any) {
-    let [order_day, setorder_day] = useState([]);
+    let [order_day, setorder_day] : any= useState([]);
     let [order_month, setorder_month] = useState([]);
     //let user: any = JSON.parse(localStorage.getItem('user')+'')
     
@@ -18,21 +18,28 @@ function BarChart(props : any) {
         const userId = props.user === null ? JSON.parse(localStorage.getItem('user')+'').users : props.user.users
         const users = props.user === null ? JSON.parse(localStorage.getItem('user')+'').users : props.user.users
         console.log(users)
-        const getOrderDay =  () => {
-          
+        const getOrderDay = async  () => {
+          let ttl =[0,0,0,0,0,0,0];
             for(let i=0;i<userId.length;i++){
-                console.log(i)
-                let s : any
-                axios
-              .get(`http://localhost:3001/api/order/daily-stats/${userId[i].id}`)
               
-              .then(res => {setorder_day(res.data) ; 
-                
-                console.log(res.data)})
+              console.log(i)
+              const res =  await    axios.get(`http://localhost:3001/api/order/daily-stats/${userId[i].id}`)
+              console.log(res.data, res.data.length)
+              // ttl = ttl+ res.data.map
               
-              .catch((error) => console.log(error.resp));
+              for(let j =0; j<res.data.length;j++){
+                let tmp = 0
+                if(res.data[j].length){
+                  for(let k of res.data[j]){
+                    tmp += k.total
+                  }
+                }
+                ttl[j] += tmp
+              }
+              
             }
-          };
+            setorder_day(ttl);
+        };
 
         /*  const getOrderMonth =  () => {
             
@@ -44,13 +51,13 @@ function BarChart(props : any) {
             
         };*/
           ///monthly-stats/:id
-
-          getOrderDay();
+          const tt = getOrderDay()
+          
          // getOrderMonth();
     },[])
 
    
-    console.log(order_month)
+  /*  console.log(order_month)
     const arrOrd= order_day.map((item: any,key : any)=> {
                     let ttl = 0
                   
@@ -62,12 +69,12 @@ function BarChart(props : any) {
                      return ttl
                   })
                   //: 0
-    const total = (order_day !== undefined || order_day !== []) 
+     const total = (order_day !== undefined || order_day !== []) 
                   ? order_day.reduce((sum,total : any)=>sum = sum + total.total,0)
-                  : 0
+                  : 0 
                   
-    console.log(arrOrd.reverse())
-
+    console.log(arrOrd.reverse())*/
+                  
     const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi']
 
     let days2 = []
@@ -75,15 +82,13 @@ function BarChart(props : any) {
     for(let i = 0; i<7; i++) {
         days2.push(days[parseInt(moment().subtract(i, 'days').format('d'))])
     }
-    
-    console.log(days2.reverse())
-
+    console.log(days2,order_day)
     const data = {
-        labels : days2,// date.now
+        labels : days2.reverse(),// date.now
         datasets : [
             {
             label : 'Sales for last week',
-            data: arrOrd ,// total du jour
+            data: order_day.reverse(),// total du jour
             backgroundColor: [
                 "#f38b4a",
                 "#56d798",
